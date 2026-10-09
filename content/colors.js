@@ -114,17 +114,24 @@
 
   /*
    * Curvas de luminosidad. kind: 'bg' | 'text' | 'border'
+   *
+   * Todas son lineales y monótonas: la luminosidad original define el orden
+   * de los colores y ese orden se conserva. Así un gris claro sigue siendo más
+   * claro que uno oscuro, y el texto mantiene contraste con su fondo.
+   *   - bg:     fondos ocupan un rango pequeño y oscuro (o muy claro en modo claro)
+   *   - text:   texto invertido hacia el extremo contrario
+   *   - border: bordes suaves sin desaparecer
    */
   const curves = {
     dark: {
-      bg: (l) => (l < 0.22 ? l : 0.08 + (1 - l) * 0.28),
-      text: (l) => (l > 0.55 ? Math.max(l, 0.8) : 0.92 - l * 0.45),
-      border: (l) => 0.2 + (1 - l) * 0.3
+      bg: (l) => 0.07 + 0.12 * l,        // 0.07 (negro) … 0.19 (blanco)
+      text: (l) => 0.92 - 0.16 * l,      // 0.92 (negro) … 0.76 (blanco)
+      border: (l) => 0.42 - 0.22 * l     // 0.42 (negro) … 0.20 (blanco)
     },
     light: {
-      bg: (l) => (l > 0.8 ? l : 0.97 - l * 0.22),
-      text: (l) => (l < 0.45 ? Math.min(l, 0.25) : 0.08 + (1 - l) * 0.45),
-      border: (l) => 0.88 - l * 0.3
+      bg: (l) => 0.86 + 0.12 * l,        // 0.86 (negro) … 0.98 (blanco)
+      text: (l) => 0.08 + 0.22 * l,      // 0.08 (negro) … 0.30 (blanco)
+      border: (l) => 0.55 + 0.4 * l      // 0.55 (negro) … 0.95 (blanco)
     }
   };
 
@@ -132,8 +139,8 @@
     const hsl = rgbToHsl(c);
     const curve = curves[scheme][kind] || curves[scheme].bg;
     hsl.l = clamp(curve(hsl.l));
-    // Reducimos un poco la saturación de fondos muy saturados en modo oscuro
-    if (scheme === 'dark' && kind === 'bg' && hsl.s > 0.7) hsl.s *= 0.85;
+    // Fondos oscuros con mucha saturación cansan la vista: los atenuamos
+    if (scheme === 'dark' && kind === 'bg') hsl.s *= 0.8;
     const o = hslToRgb(hsl);
     return c.a < 1 ? `rgba(${o.r}, ${o.g}, ${o.b}, ${+c.a.toFixed(3)})` : `rgb(${o.r}, ${o.g}, ${o.b})`;
   }
