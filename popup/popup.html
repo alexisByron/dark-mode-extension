@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Modo Oscuro Forzado</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <header>
+    <img src="../icons/icon32.png" alt="" width="24" height="24">
+    <div>
+      <h1>Modo Oscuro Forzado</h1>
+      <p id="host" class="host">—</p>
+    </div>
+  </header>
+
+  <section id="unsupported" class="notice" hidden>
+    Chrome no permite que las extensiones modifiquen esta página
+    (páginas internas del navegador o la tienda de extensiones).
+  </section>
+
+  <main id="controls">
+    <section>
+      <h2>Este sitio</h2>
+      <div class="seg" id="siteMode">
+        <button data-v="default" title="Usar la configuración global">Auto</button>
+        <button data-v="dark">🌙 Oscuro</button>
+        <button data-v="light">☀️ Claro</button>
+        <button data-v="off">Original</button>
+      </div>
+      <p id="status" class="status"></p>
+
+      <label class="row">
+        <span>Motor</span>
+        <select id="siteEngine">
+          <option value="default">Predeterminado</option>
+          <option value="dynamic">Dinámico (lee los estilos)</option>
+          <option value="filter">Filtro (invertir colores)</option>
+        </select>
+      </label>
+    </section>
+
+    <section>
+      <h2>Todos los sitios</h2>
+      <div class="seg" id="globalMode">
+        <button data-v="off">Desactivado</button>
+        <button data-v="dark">🌙 Oscuro</button>
+        <button data-v="light">☀️ Claro</button>
+      </div>
+      <label class="row">
+        <span>Motor predeterminado</span>
+        <select id="globalEngine">
+          <option value="dynamic">Dinámico</option>
+          <option value="filter">Filtro</option>
+        </select>
+      </label>
+      <label class="check">
+        <input type="checkbox" id="detectDark">
+        <span>No tocar sitios que ya tienen el esquema elegido</span>
+      </label>
+    </section>
+
+    <section>
+      <h2>Ajustes visuales</h2>
+      <label class="slider">
+        <span>Brillo <output id="brightnessOut"></output></span>
+        <input type="range" id="brightness" min="50" max="150" step="1">
+      </label>
+      <label class="slider">
+        <span>Contraste <output id="contrastOut"></output></span>
+        <input type="range" id="contrast" min="50" max="150" step="1">
+      </label>
+      <label class="slider">
+        <span>Sepia <output id="sepiaOut"></output></span>
+        <input type="range" id="sepia" min="0" max="100" step="1">
+      </label>
+      <label class="check">
+        <input type="checkbox" id="dimImages">
+        <span>Atenuar imágenes en modo oscuro</span>
+      </label>
+      <button id="resetVisual" class="link">Restablecer ajustes visuales</button>
+    </section>
+  </main>
+
+  <footer>
+    <span>Atajo: <kbd>Alt</kbd>+<kbd>Shift</kbd>+<kbd>D</kbd></span>
+    <button id="resetSite" class="link">Olvidar este sitio</button>
+  </footer>
+
+  <script src="popup.js"></script>
+</body>
+</html>
